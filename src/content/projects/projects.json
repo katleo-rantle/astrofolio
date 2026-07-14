@@ -1,0 +1,14 @@
+[
+  {
+    "id": "astrofolio",
+    "title": "Astrofolio",
+    "slug": "astrofolio",
+    "description": "Personal portfolio built with Astro",
+    "longDescription": "A showcase of my work, built with Astro and TypeScript.",
+    "technologies": ["Astro", "TypeScript"],
+    "github": "https://github.com/user/astrofolio",
+    "featured": true,
+    "date": "2026-07-01",
+    "status": "completed"
+  }
+]

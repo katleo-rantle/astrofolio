@@ -1,0 +1,33 @@
+name: Sync Content from Private PKM
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Portfolio Repo
+        uses: actions/checkout@v4
+
+      - name: Checkout Private PKM Repo
+        uses: actions/checkout@v4
+        with:
+          repository: katleo-rantle/theBrain
+          path: temp-content
+          ref: main
+          token: ${{ secrets.PKM_TOKEN }}
+
+      - name: Copy Blog Posts to Portfolio
+        run: |
+          mkdir -p src/content/blog
+          cp -r temp-content/_notes/_content/_blog/* src/content/blog/
+          rm -rf temp-content
+
+      - name: Commit changes if any
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: sync blog content from private PKM [skip ci]"
