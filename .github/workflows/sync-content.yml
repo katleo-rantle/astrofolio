@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout Portfolio Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout Private PKM Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: katleo-rantle/theBrain
           path: temp-content
@@ -28,6 +28,9 @@ jobs:
           rm -rf temp-content
 
       - name: Commit changes if any
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: sync blog content from private PKM [skip ci]"
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: sync blog content from private PKM [skip ci]"
+          git push
