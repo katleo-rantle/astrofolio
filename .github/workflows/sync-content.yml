@@ -2,7 +2,7 @@ name: Sync Content from Private PKM
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
