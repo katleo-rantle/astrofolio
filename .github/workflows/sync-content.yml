@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout Portfolio Repo
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: master
 
       - name: Checkout Private PKM Repo
         uses: actions/checkout@v5
@@ -24,15 +27,18 @@ jobs:
       - name: Copy Blog Posts to Portfolio
         run: |
           mkdir -p src/content/blog
-          cp -r temp-content/_notes/_content/_blog/* src/content/blog/
-          rm -rf temp-content
+          cp -r temp-content/_notes/_content/_blog/* src/content/blog/ || true
+          rm -rf temp-content || true
 
       - name: Commit changes if any
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+          # Ensure we have remote history so rebase/push can succeed
+          git fetch origin master
+          # Rebase local work on top of remote master to avoid non-fast-forward pushes
+          git rebase origin/master || { echo "Rebase failed due to conflicts; please resolve manually."; exit 1; }
           git add -A
           git diff --staged --quiet || git commit -m "chore: sync blog content from private PKM [skip ci]"
-          git pull --rebase
-          git push
+          git push origin HEAD:master
