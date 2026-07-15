@@ -31,6 +31,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
           git add -A
           git diff --staged --quiet || git commit -m "chore: sync blog content from private PKM [skip ci]"
           git push
