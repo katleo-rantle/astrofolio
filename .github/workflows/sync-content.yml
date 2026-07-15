@@ -1,6 +1,8 @@
 name: Sync Content from Private PKM
 
 on:
+  repository_dispatch:
+    types: [content-updated]
   push:
     branches: [ master ]
   workflow_dispatch:
